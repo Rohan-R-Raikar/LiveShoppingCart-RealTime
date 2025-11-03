@@ -1,0 +1,9 @@
+﻿Packages Requiered to install
+dotnet add package Microsoft.EntityFrameworkCore.SqlServer
+dotnet add package Microsoft.EntityFrameworkCore.Tools
+dotnet add package Microsoft.AspNetCore.SignalR
+dotnet add package Microsoft.AspNetCore.Identity.EntityFrameworkCore
+dotnet add package Microsoft.AspNetCore.Identity.UI
+
+Now we need to ApplicationDbContext class for database connection and Identity management
+Now Databse coniguration is done in appsettings.json file
