@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using LiveShoppingCart_RealTime.Models;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Threading.Tasks;
 
@@ -7,9 +8,9 @@ namespace LiveShoppingCart_RealTime.Data
     public class RoleSeeder
     {
         private readonly RoleManager<IdentityRole> _roleManager;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public RoleSeeder(RoleManager<IdentityRole> roleManager, UserManager<IdentityUser> userManager)
+        public RoleSeeder(RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager)
         {
             _roleManager = roleManager ?? throw new ArgumentNullException(nameof(roleManager));
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
@@ -47,7 +48,7 @@ namespace LiveShoppingCart_RealTime.Data
             if (existingAdmin != null)
                 return;
 
-            var adminUser = new IdentityUser
+            var adminUser = new ApplicationUser
             {
                 UserName = email,
                 Email = email,
@@ -68,7 +69,7 @@ namespace LiveShoppingCart_RealTime.Data
         /// Assigns the "User" role to newly registered users
         /// (to be called after user registration)
         /// </summary>
-        public async Task AssignUserRoleAsync(IdentityUser user)
+        public async Task AssignUserRoleAsync(ApplicationUser user)
         {
             if (user == null) throw new ArgumentNullException(nameof(user));
             if (!await _userManager.IsInRoleAsync(user, "User"))

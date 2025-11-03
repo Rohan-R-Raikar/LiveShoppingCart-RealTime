@@ -8,6 +8,10 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+// Register RoleSeeder service
+builder.Services.AddScoped<RoleSeeder>();
+
+
 // For database connection
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -18,13 +22,14 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 //    options.SignIn.RequireConfirmedAccount = false)
 //    .AddEntityFrameworkStores<ApplicationDbContext>();
 
-builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
     options.SignIn.RequireConfirmedAccount = false;
 })
 .AddEntityFrameworkStores<ApplicationDbContext>()
 .AddDefaultTokenProviders()
 .AddDefaultUI();
+
 
 // --- MVC + SignalR ---
 builder.Services.AddControllersWithViews();
@@ -40,7 +45,7 @@ using (var scope = app.Services.CreateScope())
     {
         var roleSeeder = new RoleSeeder(
             services.GetRequiredService<RoleManager<IdentityRole>>(),
-            services.GetRequiredService<UserManager<IdentityUser>>());
+            services.GetRequiredService<UserManager<ApplicationUser>>());
         await roleSeeder.SeedRolesAsync();
         await roleSeeder.SeedAdminAsync("admin@shop.com", "Admin@123");
     }
