@@ -5,5 +5,8 @@ dotnet add package Microsoft.AspNetCore.SignalR
 dotnet add package Microsoft.AspNetCore.Identity.EntityFrameworkCore
 dotnet add package Microsoft.AspNetCore.Identity.UI
 
+Now we need to create Models for our application
 Now we need to ApplicationDbContext class for database connection and Identity management
 Now Databse coniguration is done in appsettings.json file
+Now we need to create a Hub class for SignalR to manage real-time communication
+Now Update the Program.cs file to add services for Entity Framework Core, Identity, and SignalR
