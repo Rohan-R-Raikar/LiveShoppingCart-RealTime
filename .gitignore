@@ -1,20 +1,143 @@
-﻿# Visual Studio files
+# Visual Studio files
 .vs/
 *.user
 *.suo
+*.rsuser
+*.userosscache
+*.sln.docstates
+*.env
+*.userprefs
+
+# Mono auto generated files
+mono_crash.*
 
 # Build results
 bin/
 obj/
-
-# NuGet
-*.nupkg
-*.snupkg
-packages/
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Ww][Ii][Nn]32/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+[Aa][Rr][Mm]64[Ee]Cc/
+bld/
+out/
+[Ll]og/
+[Ll]ogs/
+**/[Bb]in/*
 project.lock.json
 project.fragment.lock.json
 artifacts/
 
-# Other
+# MSTest test Results
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+*.trx
+
+# NUnit
+*.VisualState.xml
+TestResult.xml
+nunit-*.xml
+
+# Approval Tests result files
+*.received.*
+
+# Benchmark Results
+BenchmarkDotNet.Artifacts/
+
+# .NET Core
+*.nupkg
+*.snupkg
+**/[Pp]ackages/*
+!**/[Pp]ackages/build/
+*.nuget.props
+*.nuget.targets
+
+# ASP.NET Scaffolding
+ScaffoldingReadMe.txt
+
+# StyleCop
+StyleCopReport.xml
+
+# Files built by Visual Studio
+*_i.c
+*_p.c
+*_h.h
+*.ilk
+*.meta
+*.obj
+*.idb
+*.iobj
+*.pch
+*.pdb
+*.ipdb
+*.pgc
+*.pgd
+*.rsp
+!Directory.Build.rsp
+*.sbr
+*.tlb
+*.tli
+*.tlh
+*.tmp
+*.tmp_proj
+*_wpftmp.csproj
 *.log
-*.DS_Store
+*.tlog
+*.vspscc
+*.vssscc
+.builds
+*.pidb
+*.svclog
+
+# ReSharper
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
+
+# TeamCity
+_TeamCity*
+
+# DotCover
+*.dotCover
+.axoCover/*
+!.axoCover/settings.json
+
+# Coverlet
+coverage*.json
+coverage*.xml
+*.coverage
+*.coveragexml
+
+# NCrunch
+_NCrunch_*
+.NCrunch_*
+.*crunch*.local.xml
+nCrunchTemp_*
+
+# Others (node_modules, sass cache, build artifacts, etc.)
+node_modules/
+.sass-cache/
+**/.paket/paket.exe
+paket-files/
+**/.fake/
+**/.cr/personal
+**/__pycache__/
+*.pyc
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+.history/
+*.vsix
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
