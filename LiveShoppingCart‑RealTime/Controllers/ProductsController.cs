@@ -1,7 +1,9 @@
 ﻿using LiveShoppingCart_RealTime.Data;
+using LiveShoppingCart_RealTime.Hubs;
 using LiveShoppingCart_RealTime.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
 namespace LiveShoppingCart_RealTime.Controllers
@@ -9,9 +11,11 @@ namespace LiveShoppingCart_RealTime.Controllers
     public class ProductsController : Controller
     {
         private readonly ApplicationDbContext _context;
-        public ProductsController(ApplicationDbContext context)
+        private readonly IHubContext<ChatHub> _hubContext;
+        public ProductsController(ApplicationDbContext context, IHubContext<ChatHub> hubContext)
         {
             _context = context;
+            _hubContext = hubContext;
         }
         public async Task<IActionResult> Index()
         {
@@ -58,6 +62,8 @@ namespace LiveShoppingCart_RealTime.Controllers
 
             TempData["SweetAlertMessage"] = "Product created successfully!";
             TempData["SweetAlertType"] = "success";
+
+            await _hubContext.Clients.All.SendAsync("New Product Added", $"{User.Identity.Name} added {product.Name} to cart");
 
             return RedirectToAction("Index");
         }

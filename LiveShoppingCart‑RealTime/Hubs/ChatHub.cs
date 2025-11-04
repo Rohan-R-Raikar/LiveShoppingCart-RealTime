@@ -23,11 +23,5 @@ namespace LiveShoppingCart_RealTime.Hubs
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, productId);
             await Clients.Group(productId).SendAsync("UserLeft", $"{Context.ConnectionId} has left the chat for product {productId}.");
         }
-
-        //Real-time cart updates
-        public async Task NotifyCartUpdates(string msg)
-        {
-            await Clients.All.SendAsync("ReceiveCartUpdate", msg);
-        }
     }
 }
