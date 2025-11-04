@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Protocol.Plugins;
 
 namespace LiveShoppingCart_RealTime.Controllers
 {
@@ -63,7 +64,27 @@ namespace LiveShoppingCart_RealTime.Controllers
             TempData["SweetAlertMessage"] = "Product created successfully!";
             TempData["SweetAlertType"] = "success";
 
-            await _hubContext.Clients.All.SendAsync("New Product Added", $"{User.Identity.Name} added {product.Name} to cart");
+            //await _hubContext.Clients.All.SendAsync("CartUpdated", new
+            //{
+            //    Message = $"{User.Identity.Name} removed {item.Product?.Name ?? "an item"} from cart",
+            //    ProductId = item.Product.Id,
+            //    NewStock = item.Product.Stock
+            //});
+
+            //await _hubContext.Clients.All.SendAsync("New Product Added", $"{User.Identity.Name} added {product.Name} to cart");
+
+            await _hubContext.Clients.All.SendAsync("NewProductAdded", new
+            {
+                Message = $"Newly added {product.Name} in Products List Available",
+                product = new
+                {
+                    id = product.Id,
+                    name = product.Name,
+                    description = product.Description,
+                    price = product.Price,
+                    stock = product.Stock
+                }
+            });
 
             return RedirectToAction("Index");
         }

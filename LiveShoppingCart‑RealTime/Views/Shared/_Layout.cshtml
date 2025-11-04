@@ -173,6 +173,44 @@
                 });
             }
         });
+
+                connection.on("NewProductAdded", data => {
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: 'success',
+                title: data.message || "Product List Updated!",
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true
+            });
+
+            if (data.product !== undefined) {
+                const container = document.querySelector('.row.row-cols-1.row-cols-md-3.g-4');
+
+                const newProductHtml = `
+                <div class="col">
+                    <div class="card h-100 shadow-sm border-0">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title fw-bold">${data.product.name}</h5>
+                            <p class="card-text text-muted">${data.product.description}</p>
+                            <p class="card-text mb-2"><strong>Price:</strong> ${data.product.price.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</p>
+                            <p class="card-text mb-3" data-product-id="${data.product.id}">
+                                <strong>Stock:</strong> <span class="product-stock">${data.product.stock}</span>
+                            </p>
+                            <div class="mt-auto d-grid gap-2">
+                                <a href="/Products/Details/${data.product.id}" class="btn btn-info btn-sm w-100">
+                                    <i class="bi bi-info-circle"></i> Details
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+
+                container.insertAdjacentHTML('beforeend', newProductHtml);
+            }
+        });
+
     </script>
 
 
