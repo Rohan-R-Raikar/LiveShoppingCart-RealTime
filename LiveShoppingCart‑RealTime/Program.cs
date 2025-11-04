@@ -1,7 +1,8 @@
 using LiveShoppingCart_RealTime.Data;
+using LiveShoppingCart_RealTime.Hubs;
 using LiveShoppingCart_RealTime.Models;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,9 +31,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 .AddDefaultTokenProviders()
 .AddDefaultUI();
 
-
 // --- MVC + SignalR ---
-builder.Services.AddControllersWithViews();
 builder.Services.AddSignalR();
 
 var app = builder.Build();
@@ -68,6 +67,8 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.MapHub<ChatHub>("/chatHub");
 
 app.MapControllerRoute(
     name: "default",

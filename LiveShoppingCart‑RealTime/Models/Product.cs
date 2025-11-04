@@ -11,10 +11,15 @@ namespace LiveShoppingCart_RealTime.Models
         public string Name { get; set; }
 
         [Required]
+        [Range(1, 500000)]
         public decimal Price { get; set; }
 
-        public string? ImageUrl { get; set; }
+        [Required]
+        public int Stock {  get; set; }
 
+        [StringLength(100)]
         public string? Description { get; set; }
+
+        public string? ImageUrl { get; set; }
     }
 }
