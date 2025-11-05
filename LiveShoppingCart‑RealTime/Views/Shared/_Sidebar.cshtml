@@ -1,0 +1,70 @@
+﻿<!--begin::Sidebar-->
+<aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
+    <!-- Sidebar Brand -->
+    <div class="sidebar-brand">
+        <a asp-area="" asp-controller="Home" asp-action="Index" class="brand-link">
+            <img src="~/dist/assets/img/AdminLTELogo.png" alt="Logo" class="brand-image opacity-75 shadow">
+            <span class="brand-text fw-light">LiveShoppingCart</span>
+        </a>
+    </div>
+
+    <!-- Sidebar Menu -->
+    <div class="sidebar-wrapper">
+        <nav class="mt-2">
+            <ul class="nav sidebar-menu flex-column">
+                <!-- Main Navigation Links -->
+                <li class="nav-item">
+                    <a asp-controller="Home" asp-action="Index" class="nav-link">
+                        <i class="nav-icon bi bi-house"></i>
+                        <p>Home</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a asp-controller="Products" asp-action="Index" class="nav-link">
+                        <i class="nav-icon bi bi-box-seam"></i>
+                        <p>Products</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a asp-controller="Cart" asp-action="Index" class="nav-link">
+                        <i class="nav-icon bi bi-cart"></i>
+                        <p>Cart</p>
+                    </a>
+                </li>
+
+                <!-- Authentication Links -->
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <li class="nav-item">
+                        <span class="nav-link text-light">
+                            <i class="nav-icon bi bi-person-circle"></i>
+                            Hello, @User.Identity.Name!
+                        </span>
+                    </li>
+                    <li class="nav-item">
+                        <form asp-area="Identity" asp-page="/Account/Logout" method="post" class="d-inline">
+                            <button type="submit" class="btn btn-outline-light w-100 text-start">
+                                <i class="bi bi-box-arrow-right"></i> Logout
+                            </button>
+                        </form>
+                    </li>
+                }
+                else
+                {
+                    <li class="nav-item">
+                        <a asp-area="Identity" asp-page="/Account/Login" class="nav-link">
+                            <i class="nav-icon bi bi-box-arrow-in-right"></i>
+                            <p>Login</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a asp-area="Identity" asp-page="/Account/Register" class="nav-link">
+                            <i class="nav-icon bi bi-person-plus"></i>
+                            <p>Register</p>
+                        </a>
+                    </li>
+                }
+            </ul>
+        </nav>
+    </div>
+</aside>
