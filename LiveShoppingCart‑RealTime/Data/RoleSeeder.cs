@@ -1,5 +1,6 @@
 ﻿using LiveShoppingCart_RealTime.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading.Tasks;
 
@@ -9,11 +10,13 @@ namespace LiveShoppingCart_RealTime.Data
     {
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly ApplicationDbContext _context;
 
-        public RoleSeeder(RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager)
+        public RoleSeeder(RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager, ApplicationDbContext context)
         {
             _roleManager = roleManager ?? throw new ArgumentNullException(nameof(roleManager));
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
+            _context = context;
         }
 
         /// <summary>
@@ -77,5 +80,46 @@ namespace LiveShoppingCart_RealTime.Data
                 await _userManager.AddToRoleAsync(user, "User");
             }
         }
+
+
+        public async Task SeedDefaultPermissionsAsync()
+        {
+            // 1. Add permissions if they do not exist
+            var defaultPermissions = new List<Permission>
+    {
+        new Permission { Name = "CanAddToCart"},
+        new Permission { Name = "CanChatInCart" }
+    };
+
+            foreach (var perm in defaultPermissions)
+            {
+                if (!_context.Permissions.Any(p => p.Name == perm.Name))
+                {
+                    _context.Permissions.Add(perm);
+                }
+            }
+            await _context.SaveChangesAsync();
+
+            // 2. Assign permissions to the User role
+            var userRole = await _roleManager.FindByNameAsync("User");
+            var permissions = await _context.Permissions
+                                    .Where(p => defaultPermissions.Select(dp => dp.Name).Contains(p.Name))
+                                    .ToListAsync();
+
+            foreach (var perm in permissions)
+            {
+                if (!_context.RolePermissions.Any(rp => rp.RoleId == userRole.Id && rp.PermissionId == perm.Id))
+                {
+                    _context.RolePermissions.Add(new RolePermission
+                    {
+                        RoleId = userRole.Id,
+                        PermissionId = perm.Id
+                    });
+                }
+            }
+            await _context.SaveChangesAsync();
+        }
+
+
     }
 }

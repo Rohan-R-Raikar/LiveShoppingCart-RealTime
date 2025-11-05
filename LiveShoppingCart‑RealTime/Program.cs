@@ -44,9 +44,18 @@ using (var scope = app.Services.CreateScope())
     {
         var roleSeeder = new RoleSeeder(
             services.GetRequiredService<RoleManager<IdentityRole>>(),
-            services.GetRequiredService<UserManager<ApplicationUser>>());
+            services.GetRequiredService<UserManager<ApplicationUser>>(),
+            services.GetRequiredService<ApplicationDbContext>()
+        );
+
         await roleSeeder.SeedRolesAsync();
         await roleSeeder.SeedAdminAsync("admin@shop.com", "Admin@123");
+        await roleSeeder.SeedDefaultPermissionsAsync();
+
+        var permissionSeeder = new PermissionSeeder(
+            services.GetRequiredService<ApplicationDbContext>()
+        );
+        permissionSeeder.Seed();
     }
     catch (Exception ex)
     {
@@ -54,6 +63,7 @@ using (var scope = app.Services.CreateScope())
         logger.LogError(ex, "An error occurred while seeding roles and admin user.");
     }
 }
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {

@@ -37,6 +37,27 @@ namespace LiveShoppingCart_RealTime.Data
                 .WithMany()
                 .HasForeignKey(rp => rp.PermissionId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            // CartItem -> Product
+            builder.Entity<CartItem>()
+                .HasOne(ci => ci.Product)
+                .WithMany()
+                .HasForeignKey(ci => ci.ProductId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // ChatMessage -> Product
+            builder.Entity<ChatMessage>()
+                .HasOne<Product>()
+                .WithMany()
+                .HasForeignKey(cm => cm.ProductId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // ChatMessage -> ApplicationUser
+            builder.Entity<ChatMessage>()
+                .HasOne<ApplicationUser>()
+                .WithMany()
+                .HasForeignKey(cm => cm.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

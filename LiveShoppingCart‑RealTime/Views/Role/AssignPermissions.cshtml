@@ -1,0 +1,23 @@
+﻿@model LiveShoppingCart_RealTime.Models.ViewModels.RolePermissionViewModel
+
+@{
+    ViewData["Title"] = "Assign Permissions";
+}
+
+<h2>Assign Permissions for Role: @Model.RoleName</h2>
+
+<form asp-action="AssignPermissions" method="post">
+    <input type="hidden" asp-for="RoleId" />
+
+    @foreach (var permission in Model.Permissions)
+    {
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="SelectedPermissionIds" value="@permission.Id"
+                   @(Model.SelectedPermissionIds.Contains(permission.Id) ? "checked" : "") />
+            @* <label class="form-check-label">@permission.Name (@permission.Description)</label> *@
+        </div>
+    }
+
+    <button type="submit" class="btn btn-success mt-2">Save Permissions</button>
+    <a asp-action="Index" class="btn btn-secondary mt-2">Cancel</a>
+</form>
