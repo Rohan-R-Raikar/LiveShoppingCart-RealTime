@@ -47,13 +47,13 @@
                 <!-- Authenticated User -->
                 <li class="nav-item dropdown user-menu">
                     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                        <img src="~/images/default-user.png" class="user-image rounded-circle shadow" alt="User Image">
+                        @* <img src="~/images/default-user.png" class="user-image rounded-circle shadow" alt="User Image"> *@
                         <span class="d-none d-md-inline">Hello, @User.Identity?.Name!</span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
                         <!--begin::User Info-->
                         <li class="user-header text-bg-primary">
-                            <img src="~/images/default-user.png" class="rounded-circle shadow" alt="User Image">
+                            @* <img src="~/images/default-user.png" class="rounded-circle shadow" alt="User Image"> *@
                             <p>@User.Identity?.Name<br /><small>Member since @DateTime.Now.Year</small></p>
                         </li>
                         <!--end::User Info-->
