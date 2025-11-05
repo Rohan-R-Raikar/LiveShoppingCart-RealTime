@@ -55,7 +55,7 @@ using (var scope = app.Services.CreateScope())
         var permissionSeeder = new PermissionSeeder(
             services.GetRequiredService<ApplicationDbContext>()
         );
-        permissionSeeder.Seed();
+        await permissionSeeder.SeedAsync();
     }
     catch (Exception ex)
     {

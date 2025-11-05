@@ -58,16 +58,18 @@ namespace LiveShoppingCart_RealTime.Controllers
             return View();
         }
 
-        // Show form to assign permissions to a role
+        // GET: Assign permissions to a role
         public async Task<IActionResult> AssignPermissions(string roleId)
         {
-            if (roleId == null) return NotFound();
+            if (string.IsNullOrEmpty(roleId))
+                return NotFound();
 
             var role = await _roleManager.FindByIdAsync(roleId);
-            if (role == null) return NotFound();
+            if (role == null)
+                return NotFound();
 
             var allPermissions = await _context.Permissions.ToListAsync();
-            var rolePermissions = await _context.RolePermissions
+            var selectedIds = await _context.RolePermissions
                 .Where(rp => rp.RoleId == roleId)
                 .Select(rp => rp.PermissionId)
                 .ToListAsync();
@@ -76,34 +78,51 @@ namespace LiveShoppingCart_RealTime.Controllers
             {
                 RoleId = role.Id,
                 RoleName = role.Name,
-                Permissions = allPermissions,
-                SelectedPermissionIds = rolePermissions
+                AllPermissions = allPermissions,
+                SelectedPermissionIds = selectedIds
             };
 
             return View(model);
         }
 
+        // POST: Assign permissions
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> AssignPermissions(RolePermissionViewModel model)
         {
-            if (!ModelState.IsValid) return View(model);
+            if (!ModelState.IsValid)
+            {
+                // Rehydrate AllPermissions for redisplay
+                model.AllPermissions = await _context.Permissions.ToListAsync();
+                return View(model);
+            }
+
+            var role = await _roleManager.FindByIdAsync(model.RoleId);
+            if (role == null)
+                return NotFound();
 
             // Remove existing permissions
-            var existingPermissions = _context.RolePermissions.Where(rp => rp.RoleId == model.RoleId);
-            _context.RolePermissions.RemoveRange(existingPermissions);
+            var existing = _context.RolePermissions.Where(rp => rp.RoleId == model.RoleId);
+            _context.RolePermissions.RemoveRange(existing);
 
-            // Add new permissions
-            foreach (var permissionId in model.SelectedPermissionIds)
+            // Add newly selected permissions safely
+            if (model.SelectedPermissionIds != null && model.SelectedPermissionIds.Any())
             {
-                _context.RolePermissions.Add(new RolePermission
+                foreach (var permissionId in model.SelectedPermissionIds)
                 {
-                    RoleId = model.RoleId,
-                    PermissionId = permissionId
-                });
+                    _context.RolePermissions.Add(new RolePermission
+                    {
+                        RoleId = model.RoleId,
+                        PermissionId = permissionId
+                    });
+                }
             }
 
             await _context.SaveChangesAsync();
+            TempData["Success"] = $"Permissions updated for role '{role.Name}'.";
+
             return RedirectToAction(nameof(Index));
         }
+
     }
 }

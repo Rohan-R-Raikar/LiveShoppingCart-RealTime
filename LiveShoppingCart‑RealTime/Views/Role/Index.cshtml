@@ -1,13 +1,14 @@
 ﻿@model IEnumerable<Microsoft.AspNetCore.Identity.IdentityRole>
+
 @{
     ViewData["Title"] = "Roles";
 }
 
-<h2>Roles</h2>
+<h2 class="mb-3">Roles</h2>
 
-<a asp-action="Create" class="btn btn-primary mb-2">Create New Role</a>
+<a asp-action="Create" class="btn btn-primary mb-3">Create New Role</a>
 
-<table class="table">
+<table class="table table-striped">
     <thead>
         <tr>
             <th>Role Name</th>
@@ -20,7 +21,10 @@
             <tr>
                 <td>@role.Name</td>
                 <td>
-                    <a class="btn btn-success" href="@Url.Action("AssignPermissions", "Role", new { roleId = role.Id })">Assign Permissions</a>
+                    <a class="btn btn-success btn-sm"
+                       href="@Url.Action("AssignPermissions", "Role", new { roleId = role.Id })">
+                        Assign Permissions
+                    </a>
                 </td>
             </tr>
         }
