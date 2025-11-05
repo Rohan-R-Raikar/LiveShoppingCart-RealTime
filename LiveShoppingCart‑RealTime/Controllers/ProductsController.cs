@@ -46,7 +46,7 @@ namespace LiveShoppingCart_RealTime.Controllers
             return View(product);
         }
 
-        [Authorize(Roles ="Admin")]
+        //[Authorize(Roles ="Admin")]
         public IActionResult Create() => View();
 
         [HttpPost, Authorize(Roles = "Admin")]
@@ -89,7 +89,7 @@ namespace LiveShoppingCart_RealTime.Controllers
             return RedirectToAction("Index");
         }
 
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -108,8 +108,8 @@ namespace LiveShoppingCart_RealTime.Controllers
             return View(product);
         }
 
-        [HttpPost, Authorize(Roles = "Admin")]
-        [ValidateAntiForgeryToken]
+        //[HttpPost, Authorize(Roles = "Admin")]
+        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Product updatedProduct)
         {
             if (!ModelState.IsValid)
@@ -144,8 +144,8 @@ namespace LiveShoppingCart_RealTime.Controllers
         }
 
 
-        [HttpPost, Authorize(Roles = "Admin")]
-        [ValidateAntiForgeryToken]
+        //[HttpPost, Authorize(Roles = "Admin")]
+        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int Productid)
         {
             var product = await _context.Products.FindAsync(Productid);
