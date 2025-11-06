@@ -8,16 +8,17 @@ namespace LiveShoppingCart_RealTime.Data
 {
     public class RoleSeeder
     {
-        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ApplicationDbContext _context;
+        private readonly RoleManager<ApplicationRole> _roleManager;
 
-        public RoleSeeder(RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager, ApplicationDbContext context)
+        public RoleSeeder(RoleManager<ApplicationRole> roleManager, UserManager<ApplicationUser> userManager, ApplicationDbContext context)
         {
             _roleManager = roleManager ?? throw new ArgumentNullException(nameof(roleManager));
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
             _context = context;
         }
+
 
         /// <summary>
         /// Seeds default roles: Admin and User
@@ -30,8 +31,8 @@ namespace LiveShoppingCart_RealTime.Data
             {
                 if (!await _roleManager.RoleExistsAsync(role))
                 {
-                    var identityRole = new IdentityRole(role);
-                    await _roleManager.CreateAsync(identityRole);
+                    var appRole = new ApplicationRole { Name = role };
+                    await _roleManager.CreateAsync(appRole);
                 }
             }
         }
@@ -86,14 +87,14 @@ namespace LiveShoppingCart_RealTime.Data
         {
             // 1. Add permissions if they do not exist
             var defaultPermissions = new List<Permission>
-    {
-        new Permission { Name = "CanAddToCart"},
-        new Permission { Name = "CanChatInCart" }
-    };
+            {
+                new Permission { Name = "CanAddToCart"},
+                new Permission { Name = "CanChatInCart" }
+            };
 
             foreach (var perm in defaultPermissions)
             {
-                if (!_context.Permissions.Any(p => p.Name == perm.Name))
+                if (!await _context.Permissions.AnyAsync(p => p.Name == perm.Name))
                 {
                     _context.Permissions.Add(perm);
                 }

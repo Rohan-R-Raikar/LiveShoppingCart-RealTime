@@ -12,6 +12,7 @@ builder.Services.AddControllersWithViews();
 // Register RoleSeeder service
 builder.Services.AddScoped<RoleSeeder>();
 
+builder.Services.AddScoped<PermissionSeeder>();
 
 // For database connection
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -23,7 +24,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 //    options.SignIn.RequireConfirmedAccount = false)
 //    .AddEntityFrameworkStores<ApplicationDbContext>();
 
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
 {
     options.SignIn.RequireConfirmedAccount = false;
 })
@@ -43,10 +44,10 @@ using (var scope = app.Services.CreateScope())
     try
     {
         var roleSeeder = new RoleSeeder(
-            services.GetRequiredService<RoleManager<IdentityRole>>(),
-            services.GetRequiredService<UserManager<ApplicationUser>>(),
-            services.GetRequiredService<ApplicationDbContext>()
-        );
+    services.GetRequiredService<RoleManager<ApplicationRole>>(),
+    services.GetRequiredService<UserManager<ApplicationUser>>(),
+    services.GetRequiredService<ApplicationDbContext>()
+);
 
         await roleSeeder.SeedRolesAsync();
         await roleSeeder.SeedAdminAsync("admin@shop.com", "Admin@123");

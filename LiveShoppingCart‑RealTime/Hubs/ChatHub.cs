@@ -4,6 +4,7 @@ namespace LiveShoppingCart_RealTime.Hubs
 {
     public class ChatHub : Hub
     {
+        /*
         //Called when a user sends a message about poduct
         public async Task SendMessage(string productId, string user, string msg)
         {
@@ -23,5 +24,6 @@ namespace LiveShoppingCart_RealTime.Hubs
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, productId);
             await Clients.Group(productId).SendAsync("UserLeft", $"{Context.ConnectionId} has left the chat for product {productId}.");
         }
+        */
     }
 }

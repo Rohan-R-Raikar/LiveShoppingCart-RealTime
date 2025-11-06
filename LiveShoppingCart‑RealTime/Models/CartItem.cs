@@ -4,21 +4,20 @@ namespace LiveShoppingCart_RealTime.Models
 {
     public class CartItem
     {
-        [Key]
         public int Id { get; set; }
-        
-        [Required]
-        public string UserId { get; set; }
-        
-        [Required]
-        public string UserName { get; set; }
-        
-        [Required]
+
+        public int CartId { get; set; }
+        public Cart Cart { get; set; }
+
         public int ProductId { get; set; }
-       
-        [Required]
+        public Product Product { get; set; }
+
+        [Range(1, 999)]
         public int Quantity { get; set; }
 
-        public Product Product { get; set; }
+        public decimal PriceAtPurchase { get; set; }
+
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime? UpdatedAt { get; set; }
     }
 }

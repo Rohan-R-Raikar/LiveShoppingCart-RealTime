@@ -1,5 +1,6 @@
 ﻿using LiveShoppingCart_RealTime.Data;
 using LiveShoppingCart_RealTime.Models;
+using Microsoft.EntityFrameworkCore;
 
 public class PermissionSeeder
 {
@@ -22,7 +23,7 @@ public class PermissionSeeder
 
         foreach (var name in permissions)
         {
-            if (!_context.Permissions.Any(p => p.Name == name))
+            if (!await _context.Permissions.AnyAsync(p => p.Name == name))
             {
                 _context.Permissions.Add(new Permission { Name = name });
             }
