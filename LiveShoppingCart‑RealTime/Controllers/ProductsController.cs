@@ -43,17 +43,6 @@ namespace LiveShoppingCart_RealTime.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Product product, IFormFile? imageFile)
         {
-            //foreach (var kvp in ModelState)
-            //{
-            //    var key = kvp.Key;
-            //    var errors = kvp.Value.Errors;
-            //    foreach (var error in errors)
-            //    {
-            //        Console.WriteLine($"Key: {key}, Error: {error.ErrorMessage}");
-            //    }
-            //}
-
-
             if (ModelState.IsValid)
             {
                 if (imageFile != null)
