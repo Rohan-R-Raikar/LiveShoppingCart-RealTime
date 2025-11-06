@@ -1,0 +1,27 @@
+﻿@model LiveShoppingCart_RealTime.Models.Product
+@{
+    ViewData["Title"] = "Delete Product";
+}
+
+<section class="content-header">
+    <h1><i class="fas fa-trash"></i> Delete Product</h1>
+</section>
+
+<section class="content">
+    <div class="alert alert-danger">
+        Are you sure you want to delete <strong>@Model.Name</strong>?
+    </div>
+
+    <div class="mb-3">
+        @if (!string.IsNullOrEmpty(Model.ImageUrl))
+        {
+            <img src="@Model.ImageUrl" class="img-thumbnail" style="max-width: 200px;" />
+        }
+    </div>
+
+    <form asp-action="DeleteConfirmed" method="post">
+        <input type="hidden" asp-for="Id" />
+        <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i> Delete</button>
+        <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+    </form>
+</section>
