@@ -53,7 +53,7 @@ namespace LiveShoppingCart_RealTime.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AIQueries");
+                    b.ToTable("AIQueries", (string)null);
                 });
 
             modelBuilder.Entity("LiveShoppingCart_RealTime.Models.ApplicationRole", b =>
@@ -191,7 +191,7 @@ namespace LiveShoppingCart_RealTime.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Carts");
+                    b.ToTable("Carts", (string)null);
                 });
 
             modelBuilder.Entity("LiveShoppingCart_RealTime.Models.CartItem", b =>
@@ -226,7 +226,7 @@ namespace LiveShoppingCart_RealTime.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("CartItems");
+                    b.ToTable("CartItems", (string)null);
                 });
 
             modelBuilder.Entity("LiveShoppingCart_RealTime.Models.Category", b =>
@@ -254,7 +254,7 @@ namespace LiveShoppingCart_RealTime.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("LiveShoppingCart_RealTime.Models.ChatMessage", b =>
@@ -299,7 +299,7 @@ namespace LiveShoppingCart_RealTime.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("ChatMessages");
+                    b.ToTable("ChatMessages", (string)null);
                 });
 
             modelBuilder.Entity("LiveShoppingCart_RealTime.Models.ChatModerationLog", b =>
@@ -332,7 +332,7 @@ namespace LiveShoppingCart_RealTime.Migrations
 
                     b.HasIndex("MessageId");
 
-                    b.ToTable("ChatModerationLogs");
+                    b.ToTable("ChatModerationLogs", (string)null);
                 });
 
             modelBuilder.Entity("LiveShoppingCart_RealTime.Models.Notification", b =>
@@ -365,7 +365,7 @@ namespace LiveShoppingCart_RealTime.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Notifications");
+                    b.ToTable("Notifications", (string)null);
                 });
 
             modelBuilder.Entity("LiveShoppingCart_RealTime.Models.Permission", b =>
@@ -391,7 +391,7 @@ namespace LiveShoppingCart_RealTime.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Permissions");
+                    b.ToTable("Permissions", (string)null);
                 });
 
             modelBuilder.Entity("LiveShoppingCart_RealTime.Models.Product", b =>
@@ -435,7 +435,7 @@ namespace LiveShoppingCart_RealTime.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
                 });
 
             modelBuilder.Entity("LiveShoppingCart_RealTime.Models.RolePermission", b =>
@@ -453,7 +453,7 @@ namespace LiveShoppingCart_RealTime.Migrations
 
                     b.HasIndex("PermissionId");
 
-                    b.ToTable("RolePermissions");
+                    b.ToTable("RolePermissions", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

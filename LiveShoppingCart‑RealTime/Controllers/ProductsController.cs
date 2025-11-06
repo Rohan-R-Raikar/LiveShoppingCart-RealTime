@@ -10,6 +10,7 @@ using NuGet.Protocol.Plugins;
 
 namespace LiveShoppingCart_RealTime.Controllers
 {
+    [Route("Products")]
     public class ProductController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -21,22 +22,38 @@ namespace LiveShoppingCart_RealTime.Controllers
             _env = env;
         }
 
+        // GET: /Products
+        [HttpGet("")]
         public async Task<IActionResult> Index()
         {
             var products = await _context.Products.Include(p => p.Category).ToListAsync();
             return View(products);
         }
 
+        // GET: /Products/Create
+        [HttpGet("Create")]
         public IActionResult Create()
         {
             ViewBag.Categories = new SelectList(_context.Categories, "Id", "Name");
             return View();
         }
 
-        [HttpPost]
+        // POST: /Products/Create
+        [HttpPost("Create")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Product product, IFormFile? imageFile)
         {
+            //foreach (var kvp in ModelState)
+            //{
+            //    var key = kvp.Key;
+            //    var errors = kvp.Value.Errors;
+            //    foreach (var error in errors)
+            //    {
+            //        Console.WriteLine($"Key: {key}, Error: {error.ErrorMessage}");
+            //    }
+            //}
+
+
             if (ModelState.IsValid)
             {
                 if (imageFile != null)
@@ -64,6 +81,8 @@ namespace LiveShoppingCart_RealTime.Controllers
             return View(product);
         }
 
+        // GET: /Products/Edit/5
+        [HttpGet("Edit/{id}")]
         public async Task<IActionResult> Edit(int id)
         {
             var product = await _context.Products.FindAsync(id);
@@ -73,7 +92,8 @@ namespace LiveShoppingCart_RealTime.Controllers
             return View(product);
         }
 
-        [HttpPost]
+        // POST: /Products/Edit/5
+        [HttpPost("Edit/{id}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Product product, IFormFile? imageFile)
         {
@@ -106,6 +126,8 @@ namespace LiveShoppingCart_RealTime.Controllers
             return View(product);
         }
 
+        // GET: /Products/Delete/5
+        [HttpGet("Delete/{id}")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null) return NotFound();
@@ -115,7 +137,8 @@ namespace LiveShoppingCart_RealTime.Controllers
             return View(product);
         }
 
-        [HttpPost, ActionName("Delete")]
+        // POST: /Products/Delete/5
+        [HttpPost("Delete/{id}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
@@ -128,4 +151,5 @@ namespace LiveShoppingCart_RealTime.Controllers
             return RedirectToAction(nameof(Index));
         }
     }
+
 }

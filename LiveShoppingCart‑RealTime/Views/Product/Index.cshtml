@@ -1,0 +1,51 @@
+﻿@model IEnumerable<LiveShoppingCart_RealTime.Models.Product>
+
+@{
+    ViewData["Title"] = "Products";
+}
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Product List</h3>
+        <div class="card-tools">
+            <a asp-action="Create" class="btn btn-success btn-sm">Add New Product</a>
+        </div>
+    </div>
+    <div class="card-body table-responsive p-0">
+        <table class="table table-hover text-nowrap">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>Stock</th>
+                    <th>Image</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Id</td>
+                        <td>@item.Name</td>
+                        <td>@item.Category?.Name</td>
+                        <td>@item.Price.ToString("C")</td>
+                        <td>@item.Stock</td>
+                        <td>
+                            @if (!string.IsNullOrEmpty(item.ImageUrl))
+                            {
+                                <img src="@item.ImageUrl" alt="@item.Name" style="width:50px;height:50px;" />
+                            }
+                        </td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary btn-sm">Edit</a>
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

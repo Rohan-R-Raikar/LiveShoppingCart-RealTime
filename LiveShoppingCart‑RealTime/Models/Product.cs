@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System.ComponentModel.DataAnnotations;
 
 namespace LiveShoppingCart_RealTime.Models
 {
@@ -17,8 +18,10 @@ namespace LiveShoppingCart_RealTime.Models
         public int Stock { get; set; }
         public string? ImageUrl { get; set; }
 
+        [Required(ErrorMessage = "Category is required")]
         public int CategoryId { get; set; }
-        public Category Category { get; set; }
+        [BindNever]
+        public Category? Category { get; set; }
 
         public bool IsActive { get; set; } = true;
 

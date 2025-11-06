@@ -10,9 +10,11 @@ namespace LiveShoppingCart_RealTime.Controllers
         private readonly ApplicationDbContext _context;
         public CategoryController(ApplicationDbContext context) => _context = context;
 
+        [HttpGet]
         public async Task<IActionResult> Index() =>
             View(await _context.Categories.ToListAsync());
 
+        [HttpGet]
         public IActionResult Create() => View();
 
         [HttpPost]
@@ -28,6 +30,7 @@ namespace LiveShoppingCart_RealTime.Controllers
             return View(category);
         }
 
+        [HttpGet]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null) return NotFound();
@@ -50,6 +53,7 @@ namespace LiveShoppingCart_RealTime.Controllers
             return View(category);
         }
 
+        [HttpGet]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null) return NotFound();
