@@ -1,4 +1,5 @@
-﻿using LiveShoppingCart_RealTime.Data;
+﻿using LiveShoppingCart_RealTime.Authorization;
+using LiveShoppingCart_RealTime.Data;
 using LiveShoppingCart_RealTime.Hubs;
 using LiveShoppingCart_RealTime.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -32,6 +33,7 @@ namespace LiveShoppingCart_RealTime.Controllers
 
         // GET: /Products/Create
         [HttpGet("Create")]
+        [HasPermission("CanAddProduct")]
         public IActionResult Create()
         {
             ViewBag.Categories = new SelectList(_context.Categories, "Id", "Name");
@@ -41,6 +43,7 @@ namespace LiveShoppingCart_RealTime.Controllers
         // POST: /Products/Create
         [HttpPost("Create")]
         [ValidateAntiForgeryToken]
+        [HasPermission("CanAddProduct")]
         public async Task<IActionResult> Create(Product product, IFormFile? imageFile)
         {
             if (ModelState.IsValid)
@@ -72,6 +75,7 @@ namespace LiveShoppingCart_RealTime.Controllers
 
         // GET: /Products/Edit/5
         [HttpGet("Edit/{id}")]
+        [HasPermission("CanEditProduct")]
         public async Task<IActionResult> Edit(int id)
         {
             var product = await _context.Products.FindAsync(id);
@@ -84,6 +88,7 @@ namespace LiveShoppingCart_RealTime.Controllers
         // POST: /Products/Edit/5
         [HttpPost("Edit/{id}")]
         [ValidateAntiForgeryToken]
+        [HasPermission("CanEditProduct")]
         public async Task<IActionResult> Edit(int id, Product product, IFormFile? imageFile)
         {
             if (id != product.Id) return NotFound();
@@ -117,6 +122,7 @@ namespace LiveShoppingCart_RealTime.Controllers
 
         // GET: /Products/Delete/5
         [HttpGet("Delete/{id}")]
+        [HasPermission("CanDeleteProduct")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null) return NotFound();
@@ -129,6 +135,7 @@ namespace LiveShoppingCart_RealTime.Controllers
         // POST: /Products/Delete/5
         [HttpPost("Delete/{id}")]
         [ValidateAntiForgeryToken]
+        [HasPermission("CanDeleteProduct")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var product = await _context.Products.FindAsync(id);
