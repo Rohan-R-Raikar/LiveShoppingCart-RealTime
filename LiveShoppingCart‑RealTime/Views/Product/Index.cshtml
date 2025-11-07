@@ -40,6 +40,13 @@
                         {
                             <a asp-action="Delete" asp-route-id="@product.Id" class="btn btn-sm btn-danger">Delete</a>
                         }
+                        @if (User.IsInRole("User"))
+                        {
+                            <form asp-controller="Cart" asp-action="AddToCart" method="post">
+                                <input type="hidden" name="productId" value="@product.Id" />
+                                <button type="submit" class="btn btn-primary">Add to Cart</button>
+                            </form>
+                        }
                     </div>
                 </div>
             </div>

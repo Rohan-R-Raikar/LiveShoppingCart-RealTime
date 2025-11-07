@@ -1,4 +1,5 @@
-﻿using LiveShoppingCart_RealTime.Data;
+﻿using LiveShoppingCart_RealTime.Authorization;
+using LiveShoppingCart_RealTime.Data;
 using LiveShoppingCart_RealTime.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -9,7 +10,7 @@ namespace LiveShoppingCart_RealTime.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly ILogger<CategoryController> _logger;
-        public CategoryController(ApplicationDbContext context, Logger<CategoryController> logger)
+        public CategoryController(ApplicationDbContext context, ILogger<CategoryController> logger)
         {
             _context = context;
             _logger = logger;
@@ -20,10 +21,12 @@ namespace LiveShoppingCart_RealTime.Controllers
             View(await _context.Categories.ToListAsync());
 
         [HttpGet]
+        [HasPermission("CanAddCategory")]
         public IActionResult Create() => View();
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [HasPermission("CanAddCategory")]
         public async Task<IActionResult> Create(Category category)
         {
             try
@@ -50,6 +53,7 @@ namespace LiveShoppingCart_RealTime.Controllers
         }
 
         [HttpGet]
+        [HasPermission("CanEditCategory")]
         public async Task<IActionResult> Edit(int? id)
         {
             try
@@ -74,6 +78,7 @@ namespace LiveShoppingCart_RealTime.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [HasPermission("CanEditCategory")]
         public async Task<IActionResult> Edit(int id, Category category)
         {
             try
@@ -99,6 +104,7 @@ namespace LiveShoppingCart_RealTime.Controllers
         }
 
         [HttpGet]
+        [HasPermission("CanDeleteCategory")]
         public async Task<IActionResult> Delete(int? id)
         {
             try
@@ -123,6 +129,7 @@ namespace LiveShoppingCart_RealTime.Controllers
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [HasPermission("CanDeleteCategory")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             try

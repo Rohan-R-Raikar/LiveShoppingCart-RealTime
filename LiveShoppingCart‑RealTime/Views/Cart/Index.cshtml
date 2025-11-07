@@ -1,10 +1,7 @@
 ﻿@model LiveShoppingCart_RealTime.Models.Cart
 
-@{
-    ViewData["Title"] = "Your Shopping Cart";
-}
-
-<h2>@ViewData["Title"]</h2>
+<h2>Your Cart</h2>
+<hr />
 
 @if (Model.Items == null || !Model.Items.Any())
 {
@@ -12,15 +9,14 @@
 }
 else
 {
-    <table class="table table-bordered table-striped">
+    <table class="table table-bordered">
         <thead>
             <tr>
                 <th>Product</th>
-                <th>Description</th>
-                <th>Price</th>
+                <th>Image</th>
                 <th>Quantity</th>
+                <th>Price</th>
                 <th>Total</th>
-                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -28,36 +24,22 @@ else
             {
                 <tr>
                     <td>@item.Product.Name</td>
-                    <td>@item.Product.Description</td>
-                    <td>@item.PriceAtPurchase.ToString("C")</td>
                     <td>
-                        <form asp-action="UpdateQuantity" asp-route-itemId="@item.Id" method="post" class="d-inline">
-                            <input type="number" name="quantity" value="@item.Quantity" min="1" class="form-control" style="width:80px; display:inline-block;" />
-                            <button type="submit" class="btn btn-sm btn-primary">Update</button>
-                        </form>
+                        <img src="@item.Product.ImageUrl" width="60" height="60" class="rounded" />
                     </td>
-                    <td>@(item.PriceAtPurchase* item.Quantity).ToString("C")</td>
-                    <td>
-                        <form asp-action="Remove" asp-route-itemId="@item.Id" method="post" class="d-inline">
-                            <button type="submit" class="btn btn-sm btn-danger">Remove</button>
-                        </form>
-                    </td>
+                    <td>@item.Quantity</td>
+                    <td>₹@item.Product.Price</td>
+                    <td>₹@(item.Product.Price* item.Quantity)</td>
                 </tr>
             }
         </tbody>
-        <tfoot>
-            <tr>
-                <td colspan="4" class="text-right"><strong>Total:</strong></td>
-                <td colspan="2">
-                    <strong>@Model.Items.Sum(i => i.PriceAtPurchase * i.Quantity).ToString("C")</strong>
-                </td>
-            </tr>
-        </tfoot>
     </table>
 
-    <form asp-action="Clear" method="post">
-        <button type="submit" class="btn btn-warning">Clear Cart</button>
-    </form>
+    <h4 class="text-end">
+        <strong>Total: ₹@Model.Items.Sum(i => i.Product.Price * i.Quantity)</strong>
+    </h4>
 
-    <a asp-controller="Checkout" asp-action="Index" class="btn btn-success">Proceed to Checkout</a>
+    <div class="text-end">
+        <a class="btn btn-success" href="/Checkout">Proceed to Checkout</a>
+    </div>
 }

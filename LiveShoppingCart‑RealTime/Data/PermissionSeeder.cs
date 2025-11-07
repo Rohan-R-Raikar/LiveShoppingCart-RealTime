@@ -20,7 +20,10 @@ public class PermissionSeeder
             "CanDeleteProduct",
             "CanChat",
             "CanManageRoles",
-            "CanManagePermissions"
+            "CanManagePermissions",
+            "CanAddCategory",
+            "CanEditCategory",
+            "CanDeleteCategory"
         };
 
         foreach (var name in permissions)

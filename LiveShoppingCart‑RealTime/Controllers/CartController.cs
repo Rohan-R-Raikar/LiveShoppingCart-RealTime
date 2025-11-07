@@ -1,6 +1,7 @@
 ﻿using LiveShoppingCart_RealTime.Data;
 using LiveShoppingCart_RealTime.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
@@ -8,121 +9,85 @@ using System.Security.Claims;
 namespace LiveShoppingCart_RealTime.Controllers
 {
     [Route("Cart")]
-    [Authorize] // Ensure user is logged in
+    [Authorize(Roles = "User")]
     public class CartController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public CartController(ApplicationDbContext context)
+        public CartController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
-        [HttpGet("")]
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // <-- fixed here
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null) return Unauthorized();
 
             var cart = await _context.Carts
                 .Include(c => c.Items)
-                    .ThenInclude(i => i.Product)
-                .FirstOrDefaultAsync(c => c.UserId == userId);
+                .ThenInclude(ci => ci.Product)
+                .FirstOrDefaultAsync(c => c.UserId == user.Id);
 
-            if (cart == null)
+            if (cart == null || !cart.Items.Any())
             {
-                cart = new Cart { UserId = userId };
-                _context.Carts.Add(cart);
-                await _context.SaveChangesAsync();
+                TempData["SweetAlertMessage"] = "Your cart is empty!";
+                TempData["SweetAlertType"] = "info";
+                return View(new Cart());
             }
 
             return View(cart);
         }
 
 
-        // POST: Cart/Add/5
-        [HttpPost("Add/{productId}")]
-        public async Task<IActionResult> Add(int productId, int quantity = 1)
+        [HttpPost]
+        public async Task<IActionResult> AddToCart(int productId, int quantity = 1)
         {
-            var userId = User.Identity.Name;
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null) return Unauthorized();
+
+            // Get user's cart or create new one
             var cart = await _context.Carts
                 .Include(c => c.Items)
-                .FirstOrDefaultAsync(c => c.UserId == userId);
+                .FirstOrDefaultAsync(c => c.UserId == user.Id);
 
             if (cart == null)
             {
-                cart = new Cart { UserId = userId };
+                cart = new Cart
+                {
+                    UserId = user.Id,
+                    CreatedAt = DateTime.Now,
+                    Items = new List<CartItem>()
+                };
+
                 _context.Carts.Add(cart);
                 await _context.SaveChangesAsync();
             }
 
-            var cartItem = cart.Items.FirstOrDefault(i => i.ProductId == productId);
-            if (cartItem != null)
+            var existingItem = cart.Items.FirstOrDefault(i => i.ProductId == productId);
+
+            if (existingItem != null)
             {
-                cartItem.Quantity += quantity;
-                cartItem.UpdatedAt = DateTime.UtcNow;
+                existingItem.Quantity += quantity;
             }
             else
             {
-                var product = await _context.Products.FindAsync(productId);
-                if (product == null) return NotFound();
-
                 cart.Items.Add(new CartItem
                 {
-                    ProductId = product.Id,
-                    Quantity = quantity,
-                    PriceAtPurchase = product.Price
+                    ProductId = productId,
+                    Quantity = quantity
                 });
             }
 
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
 
-        // POST: Cart/Remove/5
-        [HttpPost("Remove/{itemId}")]
-        public async Task<IActionResult> Remove(int itemId)
-        {
-            var cartItem = await _context.CartItems.FindAsync(itemId);
-            if (cartItem == null) return NotFound();
+            TempData["SweetAlertMessage"] = "Product added to cart!";
+            TempData["SweetAlertType"] = "success";
 
-            _context.CartItems.Remove(cartItem);
-            await _context.SaveChangesAsync();
-
-            return RedirectToAction(nameof(Index));
-        }
-
-        // POST: Cart/UpdateQuantity/5
-        [HttpPost("UpdateQuantity/{itemId}")]
-        public async Task<IActionResult> UpdateQuantity(int itemId, int quantity)
-        {
-            if (quantity < 1) return BadRequest("Quantity must be at least 1");
-
-            var cartItem = await _context.CartItems.FindAsync(itemId);
-            if (cartItem == null) return NotFound();
-
-            cartItem.Quantity = quantity;
-            cartItem.UpdatedAt = DateTime.UtcNow;
-
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
-        // GET: Cart/Clear
-        [HttpPost("Clear")]
-        public async Task<IActionResult> Clear()
-        {
-            var userId = User.Identity.Name;
-            var cart = await _context.Carts
-                .Include(c => c.Items)
-                .FirstOrDefaultAsync(c => c.UserId == userId);
-
-            if (cart != null)
-            {
-                _context.CartItems.RemoveRange(cart.Items);
-                await _context.SaveChangesAsync();
-            }
-
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index", "Products");
         }
     }
 }
