@@ -1,14 +1,14 @@
 ﻿@page
 @model LoginModel
-
 @{
+    Layout = "_LayoutMinimal";
     ViewData["Title"] = "Log in";
 }
 
 <body class="login-page bg-body-secondary">
     <div class="login-box">
         <div class="login-logo">
-            <a href="/"><b>Admin</b>LTE</a>
+            <a href="/"><b>Shopping</b>CART</a>
         </div>
         <div class="card">
             <div class="card-body login-card-body">
@@ -52,20 +52,6 @@
                     </div>
                 </form>
 
-                <!-- Social login links -->
-                <div class="social-auth-links text-center mb-3 d-grid gap-2">
-                    <p>- OR -</p>
-                    <a href="#" class="btn btn-primary">
-                        <i class="bi bi-facebook me-2"></i> Sign in using Facebook
-                    </a>
-                    <a href="#" class="btn btn-danger">
-                        <i class="bi bi-google me-2"></i> Sign in using Google+
-                    </a>
-                </div>
-
-                <p class="mb-1">
-                    <a asp-page="./ForgotPassword">I forgot my password</a>
-                </p>
                 <p class="mb-0">
                     <a asp-page="./Register" class="text-center">Register a new membership</a>
                 </p>
