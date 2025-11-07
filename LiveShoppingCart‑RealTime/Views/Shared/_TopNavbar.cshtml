@@ -23,21 +23,30 @@
             <li class="nav-item d-none d-md-block">
                 <a class="nav-link" asp-controller="Home" asp-action="Index">Home</a>
             </li>
-            <li class="nav-item d-none d-md-block">
-                <a class="nav-link" asp-controller="Role" asp-action="Users">Role</a>
-            </li>
-            <li class="nav-item d-none d-md-block">
-                <a class="nav-link" asp-controller="Role" asp-action="Index">Permission</a>
-            </li>
-            <li class="nav-item d-none d-md-block">
-                <a class="nav-link" asp-controller="Products" asp-action="Index">Products</a>
-            </li>
-            <li class="nav-item d-none d-md-block">
-                <a class="nav-link" asp-controller="Category" asp-action="Index">Category</a>
-            </li>
-            <li class="nav-item d-none d-md-block">
-                <a class="nav-link" asp-controller="Cart" asp-action="Index">Cart</a>
-            </li>
+            @if (User.IsInRole("Admin"))
+            {
+                <li class="nav-item d-none d-md-block">
+                    <a class="nav-link" asp-controller="Role" asp-action="Users">Role</a>
+                </li>
+            }
+            @if (User.IsInRole("Admin"))
+            {
+                <li class="nav-item d-none d-md-block">
+                    <a class="nav-link" asp-controller="Role" asp-action="Index">Permission</a>
+                </li>
+            }
+            @if (!User.IsInRole("Admin"))
+            {
+                <li class="nav-item d-none d-md-block">
+                    <a class="nav-link" asp-controller="Products" asp-action="Index">Products</a>
+                </li>
+                <li class="nav-item d-none d-md-block">
+                    <a class="nav-link" asp-controller="Category" asp-action="Index">Category</a>
+                </li>
+                <li class="nav-item d-none d-md-block">
+                    <a class="nav-link" asp-controller="Cart" asp-action="Index">Cart</a>
+                </li>
+            }
         </ul>
         <!--end::Start Navbar Links-->
         <!--begin::End Navbar Links-->

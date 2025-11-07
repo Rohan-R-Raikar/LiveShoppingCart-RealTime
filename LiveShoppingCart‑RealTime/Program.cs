@@ -1,3 +1,4 @@
+using LiveShoppingCart_RealTime.Authorization;
 using LiveShoppingCart_RealTime.Data;
 using LiveShoppingCart_RealTime.Hubs;
 using LiveShoppingCart_RealTime.Models;
@@ -8,6 +9,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddHttpContextAccessor();
 
 // Register RoleSeeder service
 builder.Services.AddScoped<RoleSeeder>();
@@ -32,10 +35,36 @@ builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
 .AddDefaultTokenProviders()
 .AddDefaultUI();
 
+// after AddIdentity(...)
+builder.Services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, PermissionClaimsPrincipalFactory>();
+
+builder.Services.AddAuthorization();
+
 // --- MVC + SignalR ---
 builder.Services.AddSignalR();
 
-var app = builder.Build();
+using (var tempProvider = builder.Services.BuildServiceProvider())
+{
+    var db = tempProvider.GetRequiredService<ApplicationDbContext>();
+
+    // Make sure DB is created (optional but safe)
+    db.Database.EnsureCreated();
+
+    var permissions = db.Permissions.Select(p => p.Name).ToList();
+
+    builder.Services.AddAuthorization(options =>
+    {
+        foreach (var perm in permissions)
+        {
+            options.AddPolicy(perm, policy =>
+            {
+                policy.RequireClaim("Permission", perm);
+            });
+        }
+    });
+}
+
+var app = builder.Build();;
 
 // --- Seed Roles & Admin via Service ---
 using (var scope = app.Services.CreateScope())
